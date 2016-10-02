@@ -5,17 +5,20 @@
 				#pragma vertex vert
 				#pragma fragment frag
 
-				float4 vert(float4 pos : POSITION, float4 normal : NORMAL) : SV_POSITION {
+				struct v2f {
+					float4 svPos : SV_POSITION;
+					float3 normal : NORMAL;
+				};
 
-					return mul(UNITY_MATRIX_MVP, pos);
-//					float4 world = mul(_Object2World, pos);
-//					float4 view = mul(UNITY_MATRIX_V, world);
-//					float4 projection = mul(UNITY_MATRIX_P, view);
-//					return projection;
+				v2f vert(float4 pos : POSITION, float3 normal : NORMAL) {
+					v2f OUT;
+					OUT.svPos = mul(UNITY_MATRIX_MVP, pos);
+					OUT.normal = normal;
+					return OUT;
 				}
 
-				float4 frag (float4 screenPos : SV_POSITION) : SV_TARGET {
-					return float4(1,1,1,1);
+				float4 frag (v2f input) : SV_TARGET {
+					return float4(input.normal * 0.5 + 0.5, 1);
 				}
 			ENDCG
 		}
