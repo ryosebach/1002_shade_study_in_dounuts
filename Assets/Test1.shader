@@ -7,18 +7,19 @@
 
 				struct v2f {
 					float4 svPos : SV_POSITION;
-					float3 normal : NORMAL;
+					float4 cubeColor : COLOR;
 				};
 
 				v2f vert(float4 pos : POSITION, float3 normal : NORMAL) {
 					v2f OUT;
 					OUT.svPos = mul(UNITY_MATRIX_MVP, pos);
-					OUT.normal = normal;
+					OUT.cubeColor.xyz = mul(_Object2World, normal) * 0.5 + 0.5;
+					OUT.cubeColor.w = 1.0;
 					return OUT;
 				}
 
 				float4 frag (v2f input) : SV_TARGET {
-					return float4(input.normal * 0.5 + 0.5, 1);
+					return input.cubeColor;
 				}
 			ENDCG
 		}
