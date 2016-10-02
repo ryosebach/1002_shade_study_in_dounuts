@@ -1,9 +1,16 @@
 ﻿Shader "Custom/Test1" {
+
+	Properties {
+		_CubeColor("Cube Color",COLOR) = (1,1,1,1)
+	}
+
 	SubShader {
 		Pass {
 			CGPROGRAM
 				#pragma vertex vert
 				#pragma fragment frag
+
+				uniform float4 _CubeColor;
 
 				struct v2f {
 					float4 svPos : SV_POSITION;
@@ -19,7 +26,7 @@
 				}
 
 				float4 frag (v2f input) : SV_TARGET {
-					return input.cubeColor;
+					return _CubeColor;
 				}
 			ENDCG
 		}
