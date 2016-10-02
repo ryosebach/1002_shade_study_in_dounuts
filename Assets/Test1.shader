@@ -14,7 +14,7 @@
 //					return projection;
 				}
 
-				float4 frag () : SV_TARGET {
+				float4 frag (float4 screenPos : SV_POSITION) : SV_TARGET {
 					return float4(1,1,1,1);
 				}
 			ENDCG
