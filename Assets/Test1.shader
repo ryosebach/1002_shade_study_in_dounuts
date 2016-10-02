@@ -1,7 +1,7 @@
 ﻿Shader "Custom/Test1" {
 
 	Properties {
-		_CubeColor("Cube Color",COLOR) = (1,1,1,1)
+		_MainTex("texture",2D) = "White"
 	}
 
 	SubShader {
@@ -10,23 +10,25 @@
 				#pragma vertex vert
 				#pragma fragment frag
 
-				uniform float4 _CubeColor;
+				uniform sampler2D _MainTex;
 
 				struct v2f {
 					float4 svPos : SV_POSITION;
-					float4 cubeColor : COLOR;
+					float2 uv : TEXCOORD0;
 				};
 
-				v2f vert(float4 pos : POSITION, float3 normal : NORMAL) {
+				v2f vert(float4 pos : POSITION, float2 uv : TEXCOORD0) {
 					v2f OUT;
 					OUT.svPos = mul(UNITY_MATRIX_MVP, pos);
-					OUT.cubeColor.xyz = mul(UNITY_MATRIX_V, mul(_Object2World, normal)) * 0.5 + 0.5;
-					OUT.cubeColor.w = 1.0;
+					OUT.uv = uv;
 					return OUT;
 				}
 
+				//ここでラスタライズが入る
+				//fragにはvertのOUTがラスタライズされてinputにわたる。
+
 				float4 frag (v2f input) : SV_TARGET {
-					return input.cubeColor;
+					return tex2D(_MainTex, input.uv);
 				}
 			ENDCG
 		}
